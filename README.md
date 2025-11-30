@@ -141,11 +141,29 @@ python arbitrage.py --ticker ETH --size 0.01 --long-threshold 10 --short-thresho
 python arbitrage.py --ticker BTC --size 0.002 --long-threshold 1 --short-threshold 20 --max-position 0.1
 ```
 
+### 使用日志数据进行 30 天回测
+
+在实际运行机器人并收集到 BBO 快照（例如 `logs/edgex_BTC_bbo_data.csv`）后，可以复用同样的开仓/平仓逻辑
+对最近 30 天数据做回测，生成资金曲线和交易量数据并保存：
+
+```bash
+python backtest.py \
+  --data logs/edgex_BTC_bbo_data.csv \
+  --size 0.002 \
+  --max-position 0.1 \
+  --long-threshold 10 \
+  --short-threshold 10 \
+  --initial-capital 100000
+```
+
+输出文件默认保存在 `logs/backtests/equity_curve.csv` 和 `logs/backtests/volume_curve.csv`。
+
 ## 项目结构
 
 ```
 cross-exchange-arbitrage/
 ├── arbitrage.py              # 主程序入口
+├── backtest.py               # 30 天回测入口，输出资金曲线与交易量
 ├── exchanges/                # 交易所接口实现
 │   ├── base.py              # 基础交易所接口
 │   ├── edgex.py             # edgeX 交易所实现
