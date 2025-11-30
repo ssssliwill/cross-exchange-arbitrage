@@ -137,11 +137,30 @@ python arbitrage.py --ticker ETH --size 0.01 --long-threshold 10 --short-thresho
 python arbitrage.py --ticker BTC --size 0.002 --long-threshold 1 --short-threshold 20 --max-position 0.1
 ```
 
+### 30-Day Backtest Using Logged BBO Data
+
+After running the live bot and collecting BBO snapshots (e.g., `logs/edgex_BTC_bbo_data.csv`),
+you can replay the same open/close spread logic over the most recent 30 days to generate equity
+and volume curves:
+
+```bash
+python backtest.py \
+  --data logs/edgex_BTC_bbo_data.csv \
+  --size 0.002 \
+  --max-position 0.1 \
+  --long-threshold 10 \
+  --short-threshold 10 \
+  --initial-capital 100000
+```
+
+Outputs are written to `logs/backtests/equity_curve.csv` and `logs/backtests/volume_curve.csv`.
+
 ## Project Structure
 
 ```
 cross-exchange-arbitrage/
 ├── arbitrage.py              # Main program entry point
+├── backtest.py               # Backtesting entry point for 30-day equity/volume curves
 ├── exchanges/                # Exchange interface implementations
 │   ├── base.py              # Base exchange interface
 │   ├── edgex.py             # edgeX exchange implementation
